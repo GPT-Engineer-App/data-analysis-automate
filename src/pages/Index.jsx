@@ -37,7 +37,7 @@ const Index = () => {
       data = data.map((row, index) => [...row, ...Object.values(statistics[index % statistics.length])]);
       setColumns([...headers, "Mean", "Median", "Variance", "Num of Records"]);
 
-      setColumns(headers);
+      setColumns([...headers, "Mean", "Median", "Variance", "Num of Records"]);
       setData(data);
     }
   };
