@@ -25,12 +25,17 @@ const Index = () => {
       const headers = rows[0].split(",");
       let data = rows.slice(1).map((row) => row.split(","));
       const numericData = data.map((row) => row.map((cell) => parseFloat(cell)).filter((cell) => !isNaN(cell)));
-      const statistics = numericData[0].map((_, colIndex) => ({
-        mean: numericData.reduce((sum, row) => sum + row[colIndex], 0) / numericData.length,
-        median: numericData.map((row) => row[colIndex]).sort()[Math.floor(numericData.length / 2)],
-        variance: numericData.reduce((variance, row) => variance + Math.pow(row[colIndex] - this.mean, 2), 0) / numericData.length,
-      }));
+      const statistics = numericData[0].map((_, colIndex) => {
+        const mean = numericData.reduce((sum, row) => sum + row[colIndex], 0) / numericData.length;
+        return {
+          mean: mean,
+          median: numericData.map((row) => row[colIndex]).sort()[Math.floor(numericData.length / 2)],
+          variance: numericData.reduce((variance, row) => variance + Math.pow(row[colIndex] - mean, 2), 0) / numericData.length,
+          numRecords: numericData.length,
+        };
+      });
       data = data.map((row, index) => [...row, ...Object.values(statistics[index % statistics.length])]);
+      setColumns([...headers, "Mean", "Median", "Variance", "Num of Records"]);
 
       setColumns(headers);
       setData(data);
